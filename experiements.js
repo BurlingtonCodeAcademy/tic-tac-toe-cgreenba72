@@ -41,9 +41,9 @@ checkWin = () => {
 console.log(checkWin()) */
 
 
-boardArr2 = ['x','o','x',
-            'o','o','x',
-            'x','x','x']
+boardArr2 = [['x','o','x'],
+            ['o','o','x',]
+            ['x','x','x']]
 
 
 //onsole.log(boardSubArray1)
@@ -51,9 +51,9 @@ boardArr2 = ['x','o','x',
 //console.log(boardSubArray3)
 
 console.log(rebuiltArray)     
-letterValue= {
+letterValue = {
   x : 1,
-  o : 2
+  o : 2,
 }
 //console.log(letterValue.x)
 breakIntoSubArrays = (anotherArray)=> {

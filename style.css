@@ -1,5 +1,6 @@
 body {
   background-image: url('milky-way-2695569_1920.jpg');
+  background-repeat: inherit;
   width: 1000px;
   margin: 10px auto;
   text-align: center;
@@ -10,13 +11,13 @@ body {
 }
 
 h2 {
-  font-size: 3.5em;
+  font-size: 2em;
   text-align: center;
   height: 75px;
 }
 
 span{
-  font-size: 72px;
+  font-size: 65px;
   margin-top: 20px;
 }
 
@@ -64,9 +65,9 @@ div.board {
 
 #statusLine{
   display: block;
-  font-size: 3em;
+  font-size: 2em;
 }
-#start {
+button {
   margin-top: 5%;
-  font-size: 2.5em;
+  font-size: 1.5em;
 }

@@ -1,7 +1,9 @@
+//global variables
+
 let board = document.querySelectorAll('div[id^="cell-"]');
 let startButton = document.getElementById("start");
 let statusArea = document.getElementById("statusLine");
-let playClock = true;
+let resetButton = document.getElementById('reset')
 
 // game class
 class Game {
@@ -52,7 +54,7 @@ let boardArr = []
     return rebuiltArray
   }
 
-
+//checks wins vertically and horizontally
 checkWinUpDownAndAcross = (someArray) => {
   for(var i = 0; i<3;i++) {
     var colSum = "";
@@ -62,9 +64,11 @@ checkWinUpDownAndAcross = (someArray) => {
     if (colSum === ("OOO")) {
     cancelEventListeners()
     statusArea.textContent = "Circle's Win"
+    return true
   } else if (colSum === "XXX") {
     cancelEventListeners()
-    statusArea.textContent = "Cross's Win";;
+    statusArea.textContent = "Cross's Win";
+    return true
     }
   }
     
@@ -76,38 +80,57 @@ checkWinUpDownAndAcross = (someArray) => {
       if (rowSum === ("OOO")) {
       cancelEventListeners()
       statusArea.textContent = "Circle's Win"
+      return true
       } else if (rowSum === "XXX") {
         cancelEventListeners()
         statusArea.textContent = "Cross's Win";
+        return true
       }
+    }
   }
-}
 
-
+//checks diagnol wins
 checkWinDiagnol = (someArray) => {
   if (someArray[0]+someArray[4]+someArray[8] === "OOO"){
       cancelEventListeners()
       statusArea.textContent = "Circle's Win"
+      return true
 }
   else if (someArray[0]+someArray[4]+someArray[8] === "XXX"){
       cancelEventListeners()
       statusArea.textContent = "Cross's Win"
+      return true
   }
   else if (someArray[2]+someArray[4]+someArray[6] === "OOO"){
     cancelEventListeners()
     statusArea.textContent = "Circle's Win"
+    return true
 }
   else if (someArray[2]+someArray[4]+someArray[6] === "XXX"){
     cancelEventListeners()
     statusArea.textContent = "Cross's Win"
+    return true
   }
+}
+//check stalemate not working.... yet
+/* checkStalemate = (count,checkwin1,checkwin2) => {
+  if (count === 9) {
+    if (checkwin1 || checkwin2) {
+      statusArea.textContent = "Stalemate"
+    }
+  }
+} */
+
+reset = () => {
+  window.location.reload(true);
 }
 
 
-
-function gameClock() {
+// game clock function
+ gameClock = (playing=true) => {
+  if (playing) {
   let startTime = Date.now()
-  t = setInterval(function () {
+  time = setInterval(function () {
       let now = new Date().getTime()
       let timer = now - startTime
       let days = Math.floor(timer / (1000 * 60 * 60 * 24));
@@ -116,37 +139,30 @@ function gameClock() {
       let seconds = Math.floor((timer % (1000 * 60)) / 1000)
       document.getElementById("timer").innerHTML = days + "d " + hours + "h "
       + minutes + "m " + seconds + "s "
-  })}
+  })} else {
+      clearInterval(time)
+        }
+  }
+  
+
 
 
 //creates global game object
 let game = new Game();
 
-
+//starts game
   let startGame = () => {
     startButton.disabled = true;
     let whosTurn = game.playerTurn();
     game.printMessages(whosTurn);
     setUpEventListeners()
+    gameClock()
   };
 
-
-
-
-  /* gets ahold of all the individual cell elements and puts a click event 
-  listener on each of them */
-  function setUpEventListeners () {
-    board.forEach(function(elem) {
-    elem.addEventListener('click', play)}
-    )}
-   
-  function cancelEventListeners () {
-    board.forEach(function(elem) {
-    elem.removeEventListener('click', play)}
-    )}
-
-
+let count = 0
+// plays game
  function play (evt) {
+    count++
     let whosTurn = game.playerTurn();
     game.printMessages(whosTurn);
     evt.target.textContent = game.drawLetter(whosTurn)
@@ -155,11 +171,27 @@ let game = new Game();
     let splitUpGameBoardArray = breakIntoSubArrays(gameBoardArray)
     checkWinUpDownAndAcross(splitUpGameBoardArray)
     checkWinDiagnol(gameBoardArray)
+    checkStalemate(count,checkWinUpDownAndAcross(splitUpGameBoardArray),checkWinDiagnol(gameBoardArray))
  }
 
+//Event Listeners
 
-startButton.addEventListener("click", startGame);
-startButton.addEventListener('click', gameClock);
+startButton.addEventListener('click', startGame);
+resetButton.addEventListener('click', reset);
+  /* gets ahold of all the individual cell elements and puts a click event 
+  listener on each of them */
+
+  function setUpEventListeners () {
+  board.forEach(function(elem) {
+  elem.addEventListener('click', play)}
+  )}
+ 
+function cancelEventListeners () {
+  let playing = false
+  gameClock(playing)
+  board.forEach(function(elem) {
+  elem.removeEventListener('click', play)}
+  )}
 
 
 
